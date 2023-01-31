@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% if pendingorder %}
+<div class="card">
+    <h5 class="card-header">Pending Orders</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Service</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% if pendingorder %}
+                {% for pendingorder in pendingorder %}
+                <tr>
+                    <td>
+                        <p class="mb-0 fw-semibold"><a href="#">{{ pendingorder.invoice }}</a></p>
+                        <small class="text-muted">{{ pendingorder.created }}</small>
+                    </td>
+                    <td>
+                        <p class="mb-0 fw-semibold">{{ pendingorder.nominaltopupid }}</p>
+                        <small class="text-muted">Mobile Legends: Bang Bang</small>
+                    </td>
+                    <td>
+                        <p class="mb-0">
+                            <a id="data{{ forloop.counter }}">{{ pendingorder.datatransaksi.id }}</a>
+                            {#                                <button id="copy-button" onclick="copyToClipboard()">#}
+                            {#                                    <i class="ti ti-copy"></i>#}
+                            {#                                </button>#}
+                            <button type="button" class="clipboard-btn btn btn-xs waves-effect" data-clipboard-action="copy" data-clipboard-target="#data{{ forloop.counter }}">
+                            <i class="ti ti-copy"></i>
+                            </button>
+                        </p>
+                        <p class="mb-0">
+                            <a>{{ pendingorder.datatransaksi.server }}</a>
+                            </button>
+                        </p>
+                        <p class="mb-0">
+                            <a>{{ pendingorder.datatransaksi.nickname }}</a>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <span class="badge bg-label-primary me-{{ pendingorder.id }}">{{ pendingorder.statustransaksiid }}</span>
+                    </td>
+                    <td>
+                        <form action="{% url 'orders-update' %}" class="row g-3" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="invoice" class="form-control" value="{{ pendingorder.invoice }}" id="id_invoice">
+                            <input type="hidden" name="statustransaksiid" value="2" class="form-control" id="id_statustransaksiid">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="submit" class="btn btn-success waves-effect waves-light">Done</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7">Tidak ada orderan</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% if listorders %}
+<div class="card">
+    <h5 class="card-header">List Orders</h5>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+                    <th>Service</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% if listorders %}
+                {% for listorders in listorders %}
+                <tr>
+                    <td>
+                        <p class="mb-0 fw-semibold"><a href="#">{{ listorders.invoice }}</a></p>
+                        <small class="text-muted">{{ listorders.created }}</small>
+                    </td>
+                    <td>
+                        <p class="mb-0 fw-semibold">{{ listorders.nominaltopupid }}</p>
+                        <small class="text-muted">{{ listorders.nama_game }}</small>
+                    </td>
+                    <td>
+                        <p class="mb-0">
+                            <a id="{{ listorders.datatransaksi.id }}">{{ listorders.datatransaksi.id }}</a>
+                            {#                                <button id="copy-button" onclick="copyToClipboard()">#}
+                            {#                                    <i class="ti ti-copy"></i>#}
+                            {#                                </button>#}
+                            <button type="button" class="clipboard-btn btn btn-xs waves-effect" data-clipboard-action="copy" data-clipboard-target="#{{ listorders.datatransaksi.id }}">
+                            <i class="ti ti-copy"></i>
+                            </button>
+                        </p>
+                        <p class="mb-0">
+                            <a>{{ listorders.datatransaksi.server }}</a>
+                            </button>
+                        </p>
+                        <p class="mb-0">
+                            <a>{{ listorders.datatransaksi.nickname }}</a>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <span class="badge bg-label-primary me-{{ listorders.id }}">{{ listorders.statustransaksiid }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7">Tidak ada orderan</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% if neworder %}
+<div class="container text-center">
+    <div class="row">
+        {% if listgame %}
+            {% for listgame in listgame %}
+            <div class="col">
+                <a href="#">
+                    <div class="card">
+                    <img class="card-img-top img-thumbnail" src="{{ listgame.gambar.url }}" alt="Card image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ listgame.title }}</h5>
+                    </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+<!--/ Basic Bootstrap Table -->
+{% endblock %}
